@@ -2,11 +2,14 @@
 
 #include <format>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 int main() {
     const char* path = "/";
 
     struct statvfs fs {};
+    
     if (statvfs(path, &fs) != 0) {
         std::cerr << std::format("cannot read {}\n", path);
         return 1;
@@ -20,7 +23,14 @@ int main() {
     const double used = total - avail;
     const double percent = (total > 0.0) ? used / total * 100.0 : 0.0;
 
-    std::cout << std::format("{} is {:.1f}% full ({:.0f} GB used of {:.0f} GB)\n", path, percent,
-                             used / 1e9, total / 1e9);
+    for (;;) {
+        std::this_thread::sleep_for(std::chrono::seconds{5});
+    
+        std::cout << std::format("{} is {:.1f}% full ({:.0f} GB used of {:.0f} GB)\n", 
+                                path, 
+                                percent,
+                                used / 1e9, total / 1e9);
+    }
+
     return 0;
 }
