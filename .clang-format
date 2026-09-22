@@ -1,0 +1,45 @@
+# Formatting is not worth arguing about -- pick a base style, commit it, and
+# never think about it again. This is LLVM style with a 100-column limit and
+# 4-space indents, which reads better on a modern screen than LLVM's 80/2.
+#
+# Format one file:   clang-format -i src/config.cpp
+# Format everything: find src include tests -name '*.?pp' | xargs clang-format -i
+#
+# Your editor almost certainly has "format on save" -- turn it on. It picks this
+# file up automatically because it sits at the project root.
+
+BasedOnStyle: LLVM
+
+ColumnLimit: 100
+IndentWidth: 4
+AccessModifierOffset: -4
+
+PointerAlignment: Left          # `int* p`, not `int *p`
+ReferenceAlignment: Left        # `int& r`
+QualifierAlignment: Left        # `const int`, not `int const`
+
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+BreakBeforeBraces: Attach
+SeparateDefinitionBlocks: Always
+
+# Group includes so the ordering is stable and meaningful:
+#   1. this file's own header (LLVM style puts it first automatically)
+#   2. C system headers
+#   3. C++ standard library
+#   4. third-party (curl, catch2)
+#   5. our own headers
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^<sys/.*>'
+    Priority: 2
+  - Regex: '^<(curl|catch2)/.*>'
+    Priority: 4
+  - Regex: '^<.*>'
+    Priority: 3
+  - Regex: '^".*"'
+    Priority: 5
+
+FixNamespaceComments: true

@@ -1,0 +1,13 @@
+build/
+compile_commands.json
+.cache/
+.DS_Store
+
+# vcpkg manifest-mode working directory
+vcpkg_installed/
+
+# Machine-specific preset overrides
+CMakeUserPresets.json
+
+# Personal working notes
+NOTES.md

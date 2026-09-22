@@ -1,0 +1,57 @@
+# clang-tidy is your best teacher for the C++11 -> C++20 jump.
+#
+# The `modernize-*` family literally reads your code and says "there is a newer
+# way to write this". Coming from C++11 you will see a lot of:
+#
+#   modernize-use-nullptr          NULL         -> nullptr
+#   modernize-use-auto             explicit it  -> auto
+#   modernize-loop-convert         index loop   -> range-for
+#   modernize-use-trailing-return  (style)
+#   modernize-make-unique          new T        -> std::make_unique<T>
+#   modernize-pass-by-value        const&+copy  -> by value + std::move
+#   modernize-use-nodiscard        adds [[nodiscard]]
+#
+# Run it on one file:      clang-tidy -p build/debug src/config.cpp
+# Let it rewrite for you:  clang-tidy -p build/debug --fix src/config.cpp
+#
+# Read every --fix diff before accepting it. It is usually right, occasionally
+# not, and the ones where it is wrong are the ones worth understanding.
+
+Checks: >
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  concurrency-*,
+  cppcoreguidelines-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -bugprone-easily-swappable-parameters,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -readability-magic-numbers,
+  -readability-identifier-length,
+  -modernize-use-trailing-return-type,
+  -misc-include-cleaner,
+  -cppcoreguidelines-pro-type-vararg,
+  -cert-err58-cpp
+
+# Notes on what is switched off and why:
+#
+#  easily-swappable-parameters  fires on any two adjacent same-typed params.
+#                               Technically true, endlessly noisy.
+#  magic-numbers                this is a small program; 85.0 inline is fine.
+#  identifier-length            it dislikes `i`, `n`, `ok`. It is wrong.
+#  use-trailing-return-type     rewrites every function to `auto f() -> int`.
+#                               Valid style, but not worth forcing everywhere.
+#  include-cleaner              very aggressive about transitive includes and
+#                               fights with system headers on macOS.
+#  pro-type-vararg              unavoidable: curl_easy_setopt IS variadic.
+#
+# Turn `misc-include-cleaner` back on once you are comfortable -- include
+# hygiene is a real skill and it does teach it well.
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*/(src|include|tests)/.*'
+FormatStyle: file
