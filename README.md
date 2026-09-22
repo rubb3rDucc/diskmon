@@ -1,11 +1,15 @@
 # diskmon
 
-A disk-usage watchdog for a self-hosted media server. It polls a filesystem and
+A C++ rewrite of the disk-usage watchdog for my self-hosted media server. It polls a filesystem and
 pauses all qBittorrent torrents when usage crosses a threshold, resuming them
 once there's room again, so an unattended download queue can't fill the disk and
 take the rest of the stack down with it.
 
 C++20, libcurl, no other runtime dependencies.
+
+Used Claude for scaffolding.
+
+oh, and i'm using this project to help me learn and demo C++20, the build system around it (cmake, ninja, clang-tidy, etc.), and try out some of the linux and C++ I've been learning over the past couple of months
 
 > **Status:** early. Currently reports disk usage; the qBittorrent control loop
 > is in progress. See [Roadmap](#roadmap).
