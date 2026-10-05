@@ -10,7 +10,8 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "DISKMON_SANITIZE": "ON"
+        "DISKMON_SANITIZE": "ON",
+        "CMAKE_OSX_SYSROOT": "macosx"
       }
     },
     {
